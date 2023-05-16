@@ -4,14 +4,17 @@ from datetime import datetime
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import norm
+from scipy.stats import poisson
+
+from tools import db
+
+### Constants ###
+bins_sequence = np.arange(0, 40, 2)
+# Compute the Poisson PMF
+pmf = poisson.pmf(bins_sequence, mu=10)
 
 
-global db 
-data_path = "D:/Coding/Bitcoin/Data"
-db = bex.BitcoinDB(data_path, False)
-bins_sequence = [i for i in range(40)]
-
+### Functions ###
 def retrieve_block_paces_epoch(difficulty_times):
     block_paces = []
     times = []
@@ -47,41 +50,44 @@ def retrieve_block_paces_all():
 # average = sum(block_paces) / len(block_paces)
 # print(average)
 
+
+### Plotting ###
 fig, axs = plt.subplots(2, 2)
+fig.suptitle('Block Pace Distribution', fontsize = 20)
 
 block_paces = retrieve_block_paces_epoch(0)
 axs[0, 0].hist(block_paces, bins=bins_sequence, density=True, alpha=0.7, label='Block Pace')
-# plt.hist(block_paces, bins=bins_sequence, density=True, alpha=0.5, label='Data')
+axs[0, 0].plot(bins_sequence, pmf, 'r', label='Poisson PMF')
 axs[0, 0].set_xlabel('Pace (minutes)')
 axs[0, 0].set_ylabel('Probability')
-axs[0, 0].set_title('Block pace distribution for epoch 0')
+axs[0, 0].set_title('Epoch 0')
 axs[0, 0].legend()
 
-block_paces = retrieve_block_paces_epoch(100)
+block_paces = retrieve_block_paces_epoch(150)
 axs[0, 1].hist(block_paces, bins=bins_sequence, density=True, alpha=0.7, label='Block Pace')
-# plt.hist(block_paces, bins=bins_sequence, density=True, alpha=0.5, label='Data')
+axs[0, 1].plot(bins_sequence, pmf, 'r', label='Poisson PMF')
 axs[0, 1].set_xlabel('Pace (minutes)')
 axs[0, 1].set_ylabel('Probability')
-axs[0, 1].set_title('Block pace distribution for epoch 100')
+axs[0, 1].set_title('Epoch 150')
 axs[0, 1].legend()
 
-block_paces = retrieve_block_paces_epoch(200)
+block_paces = retrieve_block_paces_epoch(300)
 axs[1, 0].hist(block_paces, bins=bins_sequence, density=True, alpha=0.7, label='Block Pace')
-# plt.hist(block_paces, bins=bins_sequence, density=True, alpha=0.5, label='Data')
+axs[1, 0].plot(bins_sequence, pmf, 'r', label='Poisson PMF')
 axs[1, 0].set_xlabel('Pace (minutes)')
 axs[1, 0].set_ylabel('Probability')
-axs[1, 0].set_title('Block pace distribution for epoch 200')
+axs[1, 0].set_title('Epoch 300')
 axs[1, 0].legend()
 
 block_paces = retrieve_block_paces_all()
 axs[1, 1].hist(block_paces, bins=bins_sequence, density=True, alpha=0.7, label='Block Pace')
-# plt.hist(block_paces, bins=bins_sequence, density=True, alpha=0.5, label='Data')
+axs[1, 1].plot(bins_sequence, pmf, 'r', label='Poisson PMF')
 axs[1, 1].set_xlabel('Pace (minutes)')
 axs[1, 1].set_ylabel('Probability')
-axs[1, 1].set_title('Block pace distribution of all time')
+axs[1, 1].set_title('All Time')
 axs[1, 1].legend()
 
-fig.savefig('./results/Block pace distribution.png', dpi=200)  # Save the figure to file.
 
+fig.savefig('./results/Block pace distribution.png')  # Save the figure to file.
 plt.show()
 

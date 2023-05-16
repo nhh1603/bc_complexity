@@ -1,14 +1,3 @@
-
-import bitcoin_explorer as bex
-from datetime import datetime
-from bitcoinlib.services.services import Service
-
-
-# db = bex.BitcoinDB("D:/Coding/Bitcoin/Data", False)
-# count = db.get_block_header(0)
-# # # time = datetime.fromtimestamp(count).strftime("%A, %B %d, %Y %I:%M:%S")
-# print(count)
-
 import requests
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -82,6 +71,3 @@ ax.set_xlabel('Date')
 plt.grid(axis='y')
 # Show the plot
 plt.show()
-
-
-

@@ -1,43 +1,38 @@
-# import matplotlib.pyplot as plt
-# import numpy as np
-# from matplotlib import colors
-# from matplotlib.ticker import PercentFormatter
-
-# test = [0,1,2,2,3,3]
-# block = []
-# for i in range(len(test)-1):
-#     block.append(test[i+1] - test[i])
-
-# fig, axs = plt.subplots(1, 1, tight_layout=True)
-# axs.hist(test, bins=3)
-# plt.show()
-
+import requests
 import matplotlib.pyplot as plt
-import numpy as np
-from scipy.stats import poisson
+import pandas as pd
 
-# Generate some random data that follows a Poisson distribution
-data = [0,1,1,2,2,3,4,5]
+# Define the API endpoint
+api_url = 'https://api.blockchain.info/charts/hash-rate'
 
-# Create a range of x values
-x = np.arange(0, max(data) + 1)
+# Set the parameters for the API request
+params = {
+    'timespan': '12years',  # Specify the desired time range
+    'format': 'json'        # Specify the response format
+}
 
-# Compute the Poisson PMF
-pmf = poisson.pmf(x, mu=np.mean(data))
+# Send a GET request to the API endpoint
+response = requests.get(api_url, params=params)
 
-# Plot the histogram of the data
-plt.hist(data, bins=[0,1,2,3,4,5], density=True, alpha=0.5, label='Data')
+# Parse the JSON response
+data = response.json()
 
-# Plot the Poisson PMF
-plt.plot(x, pmf, 'r', label='Poisson PMF')
+# Extract the hash rate values and dates from the response
+hash_rate_values = [point['y'] for point in data['values']]
+dates = pd.to_datetime([pd.Timestamp(point['x'], unit='s').date() for point in data['values']])
 
-# Add labels and a title
-plt.xlabel('Value')
-plt.ylabel('Probability')
-plt.title('Poisson Distribution')
+# Create a DataFrame using the extracted data
+df = pd.DataFrame({'Hash Rate': hash_rate_values}, index=dates)
 
-# Add a legend
-plt.legend()
+# Plot the hash rate evolution
+df.plot(kind='line')
+
+# Set the plot title and axis labels
+plt.title('Bitcoin Network Hash Rate Evolution')
+plt.xlabel('Date')
+plt.ylabel('Hash Rate (EH/s)')
+plt.yscale('log')
+plt.grid(axis='y')
 
 # Show the plot
 plt.show()
