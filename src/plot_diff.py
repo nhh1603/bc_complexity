@@ -22,8 +22,10 @@ for i in range(391):
 x_axis = [i for i in range(391)]
 plt.plot(x_axis, difficulties, color='r', label='diff')
 plt.xlabel("Epoch")
-plt.ylabel("Difficulty (10^13)")
+plt.ylabel("Difficulty")
 # plt.yscale('log')
+plt.grid(axis='y')
 plt.title("Evolution of difficulty")
 
+plt.savefig('./results/Evolution of difficulty.png')
 plt.show()

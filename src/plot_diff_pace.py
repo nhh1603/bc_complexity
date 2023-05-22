@@ -22,7 +22,7 @@ for i in range(measure_range[0], measure_range[1]):
 difficulty_curr = get_difficulty(measure_range[0] * 2016)
 difficulties_theoretical = [difficulty_curr]
 for i in range(measure_range[0] + 1, measure_range[1]):
-    difficulty_curr = difficulty_curr * (20160.0*60 / (get_time(i * 2016) - get_time((i - 1) * 2016)))
+    difficulty_curr = difficulty_curr * (20160.0*60 / (get_time(i * 2016 - 1) - get_time((i - 1) * 2016)))
     difficulties_theoretical.append(difficulty_curr)
 
 

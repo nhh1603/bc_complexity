@@ -29,6 +29,22 @@ def get_time(blockindex):
     time = int(db.get_block_header(blockindex)['block_header']['time'])
     return time
 
+def get_block_pace(epoch):
+    block_paces = []
+    times = []
+
+    for i in range(2016):
+        height = epoch * 2016 + i
+        time = int(db.get_block_header(height)['block_header']['time'])
+        times.append(time)
+
+    for i in range(len(times) - 1):
+        time1 = times[i+1]
+        time2 = times[i]
+        block_paces.append((time1 - time2)/60.0)
+
+    return block_paces
+
 def average_block_paces_epoch(difficulty_times):
     block_paces = []
     times = []

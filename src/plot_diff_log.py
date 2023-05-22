@@ -27,4 +27,5 @@ plt.yscale('log')
 plt.grid(axis='y')
 plt.title("Evolution of difficulty in log scale")
 
+plt.savefig('./results/Evolution of difficulty in log scale.png')
 plt.show()
